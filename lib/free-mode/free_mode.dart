@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -16,12 +17,33 @@ class _FreeModePageState extends State<FreeModePage> {
   int lno = 1;
   int rounds = 0;
   bool changed = false;
-  void change(){
-    setState(() {
-      lno = Random().nextInt(3) + 1;
-      changed = true;
+  Timer _timer;
+  int _pos = 1;
+  bool dices = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+   @override
+  void dispose() {
+    _timer.cancel();
+    _timer = null;
+    super.dispose();
+  }
+
+  
+  void change() async {
+    await Future.delayed(const Duration(seconds: 1), (){
+      setState((){
+         lno = Random().nextInt(3) + 1;
+        });
     });
   }
+
+  
+
   void changeRound(){
     setState((){
       rounds += 1;
@@ -66,13 +88,38 @@ class _FreeModePageState extends State<FreeModePage> {
   }
   //await Future.delayed(const Duration(seconds: 2), (){});
 
-  /*_delayedAnimation() async {
-    await Future.delayed(const Duration(seconds: 2), (){
+  _delayedAnimation() async {
+    await Future.delayed(const Duration(seconds:2), (){
       setState((){
         changed = true;
         });
     });
-  }*/
+  }
+  void _delayAnimationDissapear() async {
+     setState(() {
+      changed = false;
+    });
+  }
+
+  _changingDices() async{
+    setState(() {
+      dices = true;
+    });
+    _timer = Timer.periodic(new Duration(milliseconds: 100), (Timer t) {
+      setState(() {
+        print("---------");
+        print(_pos);
+        _pos = Random().nextInt(3) + 1;
+      });
+    });
+    await Future.delayed(const Duration(seconds: 2), (){
+      setState((){
+        dices = false;
+        _timer.cancel();
+        _timer = null;
+        });
+    });
+  }
 
   Widget _buildDice(){
     return Container(
@@ -83,13 +130,14 @@ class _FreeModePageState extends State<FreeModePage> {
         borderRadius: BorderRadius.circular(30),
       ),
       child: GestureDetector(
-        child:  Image.asset('assets/images/dice$lno.png', width: 20, height: 20,),
+        child:  (dices) ? Image.asset('assets/images/dice$_pos.png', width: 20, height: 20,) : Image.asset('assets/images/dice$lno.png', width: 20, height: 20,),  
         onTap: () {
+          _changingDices();
+          _delayAnimationDissapear();
           print("Change");
           change();
-          //_delayedAnimation();
+          _delayedAnimation();
         },
     ));
   }
-
 }

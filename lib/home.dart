@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: 300,
                   child: Hero(tag: 'dash',child: Image.asset('assets/images/stats.png'))), 
               ),
-              SizedBox(height: 100),
+              SizedBox(height: 50),
               Center( 
                 child: GestureDetector(
                   child: Container(
