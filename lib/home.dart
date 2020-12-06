@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pde/game_mode.dart';
+import 'package:pde/how_page.dart';
+import 'package:pde/settings.dart';
+
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
@@ -13,11 +16,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+      
 
     return Scaffold(
       appBar: AppBar(
         actions: [
-          Padding(padding: EdgeInsets.only(right: 15), child: Icon(Icons.settings, color: Colors.blue,)),
+          Padding(padding: EdgeInsets.only(right: 15), 
+            child: GestureDetector(child: Icon(Icons.settings, color: Colors.blue,), onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+            },),),
         ],
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
@@ -69,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Center(child: Text("Como funciona".toUpperCase(), style: TextStyle(color: Colors.white),)),
                   ),
                   onTap: (){
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HowPage()));
                   },
                   
                 ),
